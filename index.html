@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulasi Digital Bio-ChitoShell</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo-badge">💧</div>
+      <div>
+        <h1>BIO-CHITOSHELL SIMULATOR</h1>
+        <p>Sistem Filtrasi Limbah Cair UMKM Perkotaan & Lab Sintesis Membran</p>
+      </div>
+    </div>
+    <nav class="tab-nav">
+      <button class="tab-btn active" data-tab="city-tab">1. Simulasi Kota & Tabung Filter</button>
+      <button class="tab-btn" data-tab="lab-tab">2. Lab Pembuatan Membran</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <!-- TAB 1: SIMULASI PERKOTAAN & TABUNG FILTER -->
+    <section id="city-tab" class="tab-content active">
+      <div class="grid-city">
+        <!-- Area Visual SVG -->
+        <div class="card visual-card">
+          <div class="card-header">
+            <h2>Aliran Limbah UMKM menuju Tabung Bio-ChitoShell</h2>
+            <div class="flow-controls">
+              <button id="btn-toggle-flow" class="btn btn-primary">▶ Mulai Aliran Limbah</button>
+              <button id="btn-reset-flow" class="btn btn-outline">↺ Reset</button>
+            </div>
+          </div>
+
+          <div class="svg-wrapper">
+            <svg viewBox="0 0 820 430" class="sim-svg" id="city-svg">
+              <defs>
+                <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#e0f2fe" />
+                  <stop offset="100%" stop-color="#f8fafc" />
+                </linearGradient>
+                <linearGradient id="dirtyWater" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="#78350f" />
+                  <stop offset="100%" stop-color="#b45309" />
+                </linearGradient>
+                <linearGradient id="cleanWater" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="#0ea5e9" />
+                  <stop offset="100%" stop-color="#38bdf8" />
+                </linearGradient>
+              </defs>
+
+              <!-- Latar Kota -->
+              <rect x="0" y="0" width="820" height="330" fill="url(#skyGrad)" />
+              <rect x="0" y="330" width="820" height="100" fill="#cbd5e1" />
+
+              <!-- Siluet Gedung Kota -->
+              <rect x="30" y="90" width="55" height="240" fill="#94a3b8" rx="4" />
+              <rect x="95" y="130" width="45" height="200" fill="#cbd5e1" rx="4" />
+              <rect x="680" y="80" width="60" height="250" fill="#94a3b8" rx="4" />
+              <rect x="750" y="120" width="50" height="210" fill="#cbd5e1" rx="4" />
+
+              <!-- Bangunan UMKM (Tahu/Batik/Kuliner) -->
+              <g transform="translate(45, 200)">
+                <rect x="0" y="30" width="165" height="100" fill="#f97316" rx="6" />
+                <polygon points="-10,30 82,-10 175,30" fill="#c2410c" />
+                <rect x="20" y="55" width="45" height="35" fill="#fef3c7" rx="3" />
+                <rect x="105" y="65" width="35" height="65" fill="#7c2d12" rx="3" />
+                <rect x="18" y="8" width="130" height="24" fill="#1e293b" rx="4" />
+                <text x="83" y="24" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="bold">SENTRA UMKM</text>
+              </g>
+
+              <!-- Pipa Masuk (Limbah Keruh) -->
+              <path d="M 210 295 L 340 295 L 340 120 L 385 120" fill="none" stroke="#475569" stroke-width="18" stroke-linejoin="round" />
+              <path id="pipe-inlet-flow" class="water-flow dirty" d="M 210 295 L 340 295 L 340 120 L 385 120" fill="none" stroke="url(#dirtyWater)" stroke-width="10" stroke-linejoin="round" />
+              <text x="275" y="278" text-anchor="middle" fill="#78350f" font-size="12" font-weight="bold">Limbah Cair UMKM</text>
+
+              <!-- TABUNG FILTER BIO-CHITOSHELL -->
+              <g transform="translate(385, 75)">
+                <!-- Badan Tabung Transparan -->
+                <rect x="0" y="0" width="150" height="275" rx="22" fill="#ffffff" fill-opacity="0.85" stroke="#0f172a" stroke-width="4" />
+                <text x="75" y="-12" text-anchor="middle" fill="#0f172a" font-size="13" font-weight="bold">TABUNG BIO-CHITOSHELL</text>
+
+                <!-- Komponen 1: Inlet Diffuser & Ruang Tampung Awal -->
+                <g class="filter-layer active-layer" data-layer="inlet">
+                  <rect x="8" y="12" width="134" height="42" rx="8" fill="#fde68a" stroke="#d97706" stroke-width="2" />
+                  <text x="75" y="37" text-anchor="middle" fill="#92400e" font-size="11" font-weight="bold">1. Diffuser & Pre-Filter</text>
+                </g>
+
+                <!-- Komponen 2: Bio-Sorbent Cangkang Kerang/Telur (CaCO3 / CaO) -->
+                <g class="filter-layer" data-layer="bioshell">
+                  <rect x="8" y="62" width="134" height="58" rx="8" fill="#e2e8f0" stroke="#475569" stroke-width="2" />
+                  <circle cx="30" cy="82" r="5" fill="#94a3b8" />
+                  <circle cx="55" cy="98" r="6" fill="#64748b" />
+                  <circle cx="85" cy="80" r="5" fill="#94a3b8" />
+                  <circle cx="115" cy="96" r="6" fill="#64748b" />
+                  <text x="75" y="112" text-anchor="middle" fill="#1e293b" font-size="11" font-weight="bold">2. Bio-Sorbent Cangkang</text>
+                </g>
+
+                <!-- Komponen 3: Membran Komposit Bio-ChitoShell -->
+                <g class="filter-layer" data-layer="membrane">
+                  <rect x="8" y="128" width="134" height="62" rx="8" fill="#bae6fd" stroke="#0284c7" stroke-width="2.5" />
+                  <line x1="14" y1="148" x2="136" y2="148" stroke="#0369a1" stroke-width="2" stroke-dasharray="4 3" />
+                  <line x1="14" y1="162" x2="136" y2="162" stroke="#0369a1" stroke-width="2" stroke-dasharray="4 3" />
+                  <text x="75" y="181" text-anchor="middle" fill="#0c4a6e" font-size="11" font-weight="bold">3. Membran Bio-ChitoShell</text>
+                </g>
+
+                <!-- Komponen 4: Karbon Aktif & Ruang Air Bersih -->
+                <g class="filter-layer" data-layer="outlet">
+                  <rect x="8" y="198" width="134" height="65" rx="8" fill="#bbf7d0" stroke="#16a34a" stroke-width="2" />
+                  <text x="75" y="234" text-anchor="middle" fill="#14532d" font-size="11" font-weight="bold">4. Polishing & Outlet Bersih</text>
+                </g>
+              </g>
+
+              <!-- Pipa Keluar (Air Bersih ke Sungai/Taman Kota) -->
+              <path d="M 535 310 L 670 310" fill="none" stroke="#475569" stroke-width="18" />
+              <path id="pipe-outlet-flow" class="water-flow clean" d="M 535 310 L 670 310" fill="none" stroke="url(#cleanWater)" stroke-width="10" />
+
+              <!-- Kolam / Sungai Kota Bersih -->
+              <rect x="665" y="295" width="135" height="65" rx="12" fill="#38bdf8" stroke="#0284c7" stroke-width="3" />
+              <text x="732" y="325" text-anchor="middle" fill="#ffffff" font-size="12" font-weight="bold">Air Layak Buang</text>
+              <text x="732" y="342" text-anchor="middle" fill="#e0f2fe" font-size="10">& Irigasi Taman</text>
+            </svg>
+          </div>
+          <p class="hint-text">💡 <strong>Klik pada salah satu lapisan (1–4)</strong> di dalam tabung filter untuk melihat peran, mekanisme kerja, dan efektivitasnya.</p>
+        </div>
+
+        <!-- Panel Detail Komponen Tabung -->
+        <aside class="card info-card">
+          <div class="badge-tag" id="layer-badge">KOMPONEN 1 DARI 4</div>
+          <h3 id="layer-title">Diffuser & Pre-Filter Mekanis</h3>
+          <p id="layer-desc" class="layer-desc">
+            Berfungsi mendistribusikan aliran limbah cair UMKM secara merata ke seluruh permukaan tabung sekaligus menyaring padatan tersuspensi berukuran besar (sisa ampas tahu, lemak kasar, atau serat kain batik).
+          </p>
+
+          <div class="metrics-box">
+            <div class="metric-item">
+              <span>Fungsi Utama</span>
+              <strong id="layer-role">Pemisahan Padatan Kasar & Pemerataan Tekanan</strong>
+            </div>
+            <div class="metric-item">
+              <span>Target Polutan</span>
+              <strong id="layer-target">TSS (Total Suspended Solids) & Minyak Kasar</strong>
+            </div>
+            <div class="metric-item">
+              <span>Efisiensi Tahap Ini</span>
+              <strong id="layer-eff" class="text-green">Menurunkan kekeruhan awal hingga 45%</strong>
+            </div>
+          </div>
+
+          <div class="layer-quick-nav">
+            <button class="chip-btn active" data-layer="inlet">1. Pre-Filter</button>
+            <button class="chip-btn" data-layer="bioshell">2. Bio-Sorbent</button>
+            <button class="chip-btn" data-layer="membrane">3. Membran</button>
+            <button class="chip-btn" data-layer="outlet">4. Outlet</button>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- TAB 2: LAB PEMBUATAN MEMBRAN INTERAKTIF -->
+    <section id="lab-tab" class="tab-content">
+      <div class="grid-lab">
+        <!-- Rak Bahan Baku (Drag & Drop / Klik Tuang) -->
+        <div class="card ingredients-card">
+          <h3>Rak Bahan Inovatif</h3>
+          <p class="small-muted">Seret (<em>drag</em>) bahan ke dalam <strong>Gelas Beaker</strong> atau klik tombol <strong>Tuang</strong>.</p>
+
+          <div class="ingredient-list">
+            <div class="ingredient-item" draggable="true" data-ing="cangkang" id="ing-cangkang">
+              <div class="ing-icon">🐚</div>
+              <div class="ing-info">
+                <strong>Serbuk Cangkang Kerang/Telur</strong>
+                <span>Sumber Kalsium Karbonat (CaCO₃)</span>
+              </div>
+              <button class="btn-pour" data-ing="cangkang">Tuang</button>
+            </div>
+
+            <div class="ingredient-item" draggable="true" data-ing="kitosan" id="ing-kitosan">
+              <div class="ing-icon">🦐</div>
+              <div class="ing-info">
+                <strong>Larutan Kitosan (Chitosan)</strong>
+                <span>Biopolimer antimikroba & pengikat logam</span>
+              </div>
+              <button class="btn-pour" data-ing="kitosan">Tuang</button>
+            </div>
+
+            <div class="ingredient-item" draggable="true" data-ing="asetat" id="ing-asetat">
+              <div class="ing-icon">🧪</div>
+              <div class="ing-info">
+                <strong>Asam Asetat 1% + PVA</strong>
+                <span>Pelarut & penguat elastisitas membran</span>
+              </div>
+              <button class="btn-pour" data-ing="asetat">Tuang</button>
+            </div>
+
+            <div class="ingredient-item" draggable="true" data-ing="gliserol" id="ing-gliserol">
+              <div class="ing-icon">💧</div>
+              <div class="ing-info">
+                <strong>Gliserol (Plasticizer)</strong>
+                <span>Mencegah membran retak saat kering</span>
+              </div>
+              <button class="btn-pour" data-ing="gliserol">Tuang</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Meja Kerja Sintesis & Pembakaran -->
+        <div class="card workbench-card">
+          <div class="card-header">
+            <h3>Meja Eksperimen Sintesis Membran</h3>
+            <button id="btn-reset-lab" class="btn btn-outline">↺ Ulangi Lab</button>
+          </div>
+
+          <div class="lab-stage">
+            <!-- Stasiun 1: Tungku Pembakaran (Kalsinasi Cangkang) -->
+            <div class="station-box">
+              <h4>Tahap A: Kalsinasi (Pembakaran)</h4>
+              <div class="burner-area">
+                <div class="crucible" id="crucible">
+                  <span id="crucible-status">Cangkang Mentah</span>
+                </div>
+                <div class="flame" id="bunsen-flame">🔥</div>
+                <div class="bunsen-base">Pembakar Bunsen</div>
+              </div>
+              <div class="temp-meter">Suhu: <strong id="temp-display">27°C</strong></div>
+              <button id="btn-burn" class="btn btn-warning" disabled>🔥 Nyalakan Api (400°C)</button>
+            </div>
+
+            <!-- Stasiun 2: Gelas Beaker Pencampuran (Dropzone) -->
+            <div class="station-box dropzone" id="beaker-dropzone">
+              <h4>Tahap B: Pencampuran (Dropzone)</h4>
+              <div class="beaker">
+                <div class="liquid-fill" id="beaker-liquid"></div>
+                <div class="stirrer-bar" id="stirrer-bar"></div>
+                <span class="beaker-label" id="beaker-label">Tarik & Tuang Bahan ke Sini</span>
+              </div>
+              <div class="mix-checklist" id="mix-checklist">
+                <span class="pill" id="chk-cao">1. CaO (Hasil Bakar)</span>
+                <span class="pill" id="chk-kitosan">2. Kitosan</span>
+                <span class="pill" id="chk-asetat">3. Asam Asetat/PVA</span>
+                <span class="pill" id="chk-gliserol">4. Gliserol</span>
+              </div>
+              <button id="btn-stir" class="btn btn-primary" disabled>🌀 Aduk Homogen</button>
+            </div>
+
+            <!-- Stasiun 3: Pencetakan & Pengeringan Membran -->
+            <div class="station-box">
+              <h4>Tahap C: Cetak & Oven</h4>
+              <div class="petri-dish" id="petri-dish">
+                <div class="membrane-sheet" id="membrane-sheet"></div>
+              </div>
+              <p class="status-note" id="oven-status">Menunggu larutan homogen...</p>
+              <button id="btn-cast" class="btn btn-success" disabled>✨ Cetak & Keringkan</button>
+            </div>
+          </div>
+
+          <!-- Log Aktivitas Lab -->
+          <div class="lab-log" id="lab-log">
+            <strong>Panduan Lab:</strong> Mulai dengan menuangkan <em>Serbuk Cangkang</em> ke dalam beaker/cawan lalu nyalakan pembakaran untuk mengubah CaCO₃ menjadi CaO aktif!
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
